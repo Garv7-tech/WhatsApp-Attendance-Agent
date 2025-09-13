@@ -1,0 +1,23 @@
+{
+  "name": "snp-wa-attendance-agent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mongodb": "^6.19.0",
+    "multer": "^2.0.2",
+    "qrcode-terminal": "^0.12.0",
+    "sqlite3": "^5.1.7",
+    "util": "^0.12.5",
+    "whatsapp-web.js": "^1.33.2"
+  }
+}

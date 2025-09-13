@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Attendance Dashboard</title>
+
+    <!-- Preload critical resources -->
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="animate__animated animate__fadeInLeft">
+                    <i class="fab fa-whatsapp"></i> Attendance Dashboard
+                </h1>
+
+                <div class="header-actions">
+                    <button id="startAgentBtn" class="btn btn-success">
+                        <i class="fas fa-play"></i> Start WhatsApp Agent
+                    </button>
+                    <button id="stopAgentBtn" class="btn btn-secondary">
+                        <i class="fas fa-stop"></i> Stop WhatsApp Agent
+                    </button>
+
+                    <div id="agentStatus">Agent Status: <span id="statusText">Stopped</span></div>
+
+                    <div id="qrContainer"></div>
+                    <button id="refreshBtn" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button id="uploadBtn" class="btn btn-success">
+                        <i class="fas fa-upload"></i> Upload Students
+                    </button>
+                    <div class="status-indicator">
+                        <div id="connectionStatus" class="status offline">
+                            <i class="fas fa-circle"></i>
+                            <span>Connecting...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Student Upload Modal -->
+        <div id="uploadModal" class="modal">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-upload"></i> Upload Student Database</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-section">
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                <h4>Drag & Drop CSV file here</h4>
+                                <p>or <span class="browse-link">browse files</span></p>
+                                <p class="file-info">Supported: CSV files with columns: roll_no, name, email, phone,
+                                    branch, semester, section</p>
+                            </div>
+                            <input type="file" id="fileInput" accept=".csv" style="display: none;">
+                        </div>
+
+                        <div class="upload-progress" id="uploadProgress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <div class="progress-text" id="progressText">Uploading...</div>
+                        </div>
+
+                        <div class="sample-format">
+                            <h4>Sample CSV Format:</h4>
+                            <div class="code-block">
+                                rollNo,name,courseName,semester<br>
+                                221099,Garv Sharma,bsc cs,5<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <!-- Enhanced Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card animate__animated animate__fadeInUp">
+                    <div class="stat-icon total">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalCount">0</h3>
+                        <p>Total Records</p>
+                        <div class="stat-trend">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                    <div class="stat-icon today">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="todayCount">0</h3>
+                        <p>Today's Attendance</p>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                    <div class="stat-icon groups">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="groupCount">0</h3>
+                        <p>Active Groups</p>
+                    </div>
+                </div>
+
+                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+                    <div class="stat-icon students">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="studentCount">0</h3>
+                        <p>Registered Students</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Filters -->
+            <div class="filters animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <div class="filter-section">
+                    <h3><i class="fas fa-filter"></i> Filters</h3>
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label for="dateFilter">Date:</label>
+                            <input type="date" id="dateFilter" class="form-control">
+                        </div>
+                        <div class="filter-group">
+                            <label for="groupFilter">Group:</label>
+                            <select id="groupFilter" class="form-control">
+                                <option value="">All Groups</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="rollFilter">Roll No:</label>
+                            <input type="text" id="rollFilter" placeholder="Search by roll no..." class="form-control">
+                        </div>
+                        <div class="filter-group">
+                            <label for="nameFilter">Student Name:</label>
+                            <input type="text" id="nameFilter" placeholder="Search by name..." class="form-control">
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button id="clearFilters" class="btn btn-secondary">
+                            <i class="fas fa-eraser"></i> Clear Filters
+                        </button>
+                        <button id="applyFilters" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Table -->
+            <div class="table-container animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
+                <div class="table-header">
+                    <h2><i class="fas fa-list"></i> Attendance Records</h2>
+                    <div class="table-actions">
+                        <button id="exportBtn" class="btn btn-success">
+                            <i class="fas fa-file-excel"></i> Export CSV
+                        </button>
+                        <button id="printBtn" class="btn btn-info">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                        <div class="view-toggle">
+                            <button id="tableView" class="btn btn-outline active">
+                                <i class="fas fa-table"></i>
+                            </button>
+                            <button id="cardView" class="btn btn-outline">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table id="attendanceTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th>Student Name <i class="fas fa-sort sortable" data-column="student_name"></i></th>
+                                <th>Roll No <i class="fas fa-sort sortable" data-column="roll_no"></i></th>
+                                <th>Group <i class="fas fa-sort sortable" data-column="group_name"></i></th>
+                                <th>Date <i class="fas fa-sort sortable" data-column="date"></i></th>
+                                <th>Time <i class="fas fa-sort sortable" data-column="timestamp"></i></th>
+                                <th>Status</th>
+                                <th>Message</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceBody">
+                            <tr class="loading-row">
+                                <td colspan="9">
+                                    <div class="loading">
+                                        <div class="spinner"></div>
+                                        <span>Loading attendance data...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-wrapper">
+                    <div class="pagination-info">
+                        Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span
+                            id="totalRecords">0</span> records
+                    </div>
+                    <div class="pagination" id="pagination">
+                        <!-- Pagination buttons will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- QR Code Library -->
+    <script src="js/qrcode.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
