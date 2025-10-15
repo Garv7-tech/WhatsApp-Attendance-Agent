@@ -1,5 +1,5 @@
 import WhatsAppAgent from './agent/WhatsAppAgent.js'
-
+import CollegeWebsiteAgent from './agent/CollegeWebsiteAgent.js';
 import WebServer from './server/WebServer.js'
 import Database from './database/Database.js'
 
@@ -9,6 +9,7 @@ class AttendanceSystem{
         this.database = new Database()
         this.webserver = new WebServer(this.database)
         this.whatsappAgent = new WhatsAppAgent(this.database)
+        this.collegeWebsiteAgent = new CollegeWebsiteAgent(this.database)
     }
 
     async start(){
@@ -19,6 +20,7 @@ class AttendanceSystem{
 
             // Pass WhatsApp agent to WebServer BEFORE starting anything
             this.webserver.setWhatsAppAgent(this.whatsappAgent)
+            this.webserver.setCollegeWebsiteAgent(this.collegeWebsiteAgent)
 
             // Start WebServer
             await this.webserver.start()

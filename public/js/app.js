@@ -71,6 +71,77 @@ class AttendanceDashboard {
         const statusText = document.getElementById('statusText');
         const qrContainer = document.getElementById('qrContainer');
 
+        const launchCollegeBtn = document.getElementById('launchCollegeBtn');
+        const markCollegeBtn = document.getElementById('markCollegeBtn');
+        const stopCollegeBtn = document.getElementById('stopCollegeBtn');
+
+        if (launchCollegeBtn) {
+            launchCollegeBtn.addEventListener('click', async () => {
+                this.showToast('Launching browser... Please log in.', 'info');
+                launchCollegeBtn.disabled = true;
+                launchCollegeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Launching...';
+                try {
+                    const response = await fetch('/api/college/start', { method: 'POST' });
+                    const result = await response.json();
+                    if (result.success) {
+                        this.showToast('Browser launched. Please log in. Once you are on the dashboard, you can mark attendance.', 'success');
+                    } else {
+                        this.showToast(`Error: ${result.message}`, 'error');
+                    }
+                } catch (e) {
+                    this.showToast(`Fetch error: ${e.message}`, 'error');
+                }
+                launchCollegeBtn.disabled = false;
+                launchCollegeBtn.innerHTML = '<i class="fas fa-rocket"></i> Launch College Portal';
+            });
+        }
+
+        if (markCollegeBtn) {
+            markCollegeBtn.addEventListener('click', async () => {
+                const date = document.getElementById('dateFilter').value;
+                const groupName = document.getElementById('groupFilter').value;
+
+                if (!date || !groupName) {
+                    this.showToast('Please select a Date and Group from the filters below first!', 'warning');
+                    return;
+                }
+
+                this.showToast('Starting automation... The browser window will now be controlled.', 'info');
+                markCollegeBtn.disabled = true;
+                markCollegeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Marking...';
+
+                try {
+                    const response = await fetch('/api/college/mark', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ date, groupName })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        this.showToast(result.message, 'success');
+                    } else {
+                        this.showToast(`Error: ${result.message}`, 'error');
+                    }
+                } catch (e) {
+                    this.showToast(`Fetch error: ${e.message}`, 'error');
+                }
+                markCollegeBtn.disabled = false;
+                markCollegeBtn.innerHTML = '<i class="fas fa-check-double"></i> Mark Attendance on Portal';
+            });
+        }
+
+        if (stopCollegeBtn) {
+            stopCollegeBtn.addEventListener('click', async () => {
+                this.showToast('Stopping agent and closing browser...', 'info');
+                try {
+                    await fetch('/api/college/stop', { method: 'POST' });
+                    this.showToast('Portal agent stopped.', 'success');
+                } catch (e) {
+                    this.showToast(`Error: ${e.message}`, 'error');
+                }
+            });
+        }
+
         startBtn.addEventListener('click', async () => {
             try {
                 startBtn.disabled = true;
@@ -481,7 +552,8 @@ class AttendanceDashboard {
         height: 256,
         colorDark: "#000000",
         colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
+        correctLevel: QRCode.CorrectLevel.M,
+        margin : 200
     });
 }
     async loadData() {

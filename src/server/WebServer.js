@@ -7,6 +7,7 @@ import csv from 'csv-parser';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import WhatsAppAgent from '../agent/WhatsAppAgent.js'
+import CollegeWebsiteAgent from '../agent/CollegeWebsiteAgent.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,7 @@ export default class WebServer {
         this.upload = multer({ dest: 'uploads/' });
         this.server = null;
         this.whatsappAgent = null
+        this.collegeWebsiteAgent = null
 
         this.setup();
     }
@@ -29,6 +31,9 @@ export default class WebServer {
         this.whatsappAgent = whatsappAgent;
     }
 
+    setCollegeWebsiteAgent(collegeWebsiteAgent) {
+        this.collegeWebsiteAgent = collegeWebsiteAgent;
+    }
     setup() {
         this.app.use(cors());
         this.app.use(express.json());
@@ -125,6 +130,46 @@ export default class WebServer {
         });
 
 
+        this.app.post('/api/college/start', async (req, res) => {
+            if (!this.collegeWebsiteAgent) {
+                return res.status(500).json({ success: false, message: 'College agent not initialized.' });
+            }
+            try {
+                const result = await this.collegeWebsiteAgent.start();
+                res.json(result);
+            } catch (error) {
+                res.status(500).json({ success: false, message: error.message });
+            }
+        });
+
+        this.app.post('/api/college/stop', async (req, res) => {
+            if (!this.collegeWebsiteAgent) {
+                return res.status(500).json({ success: false, message: 'College agent not initialized.' });
+            }
+            try {
+                const result = await this.collegeWebsiteAgent.stop();
+                res.json(result);
+            } catch (error) {
+                res.status(500).json({ success: false, message: error.message });
+            }
+        });
+
+        this.app.post('/api/college/mark', async (req, res) => {
+            if (!this.collegeWebsiteAgent) {
+                return res.status(500).json({ success: false, message: 'College agent not initialized.' });
+            }
+            try {
+                const { date, groupName } = req.body;
+                if (!date || !groupName) {
+                    return res.status(400).json({ success: false, message: 'Date and Group Name are required.' });
+                }
+                const result = await this.collegeWebsiteAgent.markAttendance({ date, groupName });
+                res.json(result);
+            } catch (error) {
+                res.status(500).json({ success: false, message: error.message });
+            }
+        });
+
         this.app.post('/api/whatsapp/start', async (req, res) => {
             try {
                 if (this.whatsappAgent) {
@@ -175,18 +220,18 @@ export default class WebServer {
                 };
                 res.json({ success: true, status });
             } else {
-                res.json({ 
-                    success: true, 
-                    status: { 
-                        running: false, 
-                        connected: false, 
-                        hasQrCode: false, 
-                        qrCode: null 
-                    } 
+                res.json({
+                    success: true,
+                    status: {
+                        running: false,
+                        connected: false,
+                        hasQrCode: false,
+                        qrCode: null
+                    }
                 });
             }
         })
-        
+
         // Health check
         this.app.get('/api/health', (req, res) => {
             res.json({ success: true, status: 'running', timestamp: new Date().toISOString() });

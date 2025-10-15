@@ -89,153 +89,182 @@
         </div>
 
         <main class="main-content">
-            <!-- Enhanced Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card animate__animated animate__fadeInUp">
-                    <div class="stat-icon total">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="totalCount">0</h3>
-                        <p>Total Records</p>
-                        <div class="stat-trend">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                    <div class="stat-icon today">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="todayCount">0</h3>
-                        <p>Today's Attendance</p>
-                        <div class="stat-trend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                    <div class="stat-icon groups">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="groupCount">0</h3>
-                        <p>Active Groups</p>
-                    </div>
-                </div>
-
-                <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
-                    <div class="stat-icon students">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 id="studentCount">0</h3>
-                        <p>Registered Students</p>
+            <div class="filters animate__animated animate__fadeInUp"
+                style="animation-delay: 0.35s; background: var(--accent-color); color: white;">
+                <div class="filter-section">
+                    <h3 style="color: white;"><i class="fas fa-robot"></i> College Portal Automator</h3>
+                    <p style="color: #eee; margin-bottom: 1rem;">
+                        This tool will open a browser. Please log in manually. Once logged in, use the filters below to
+                        select a date and group, then click "Mark Attendance".
+                    </p>
+                    <div class="filter-actions" style="justify-content: flex-start;">
+                        <button id="launchCollegeBtn" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i> Launch College Portal
+                        </button>
+                        <button id="markCollegeBtn" class="btn btn-success">
+                            <i class="fas fa-check-double"></i> Mark Attendance on Portal
+                        </button>
+                        <button id="stopCollegeBtn" class="btn btn-secondary">
+                            <i class="fas fa-stop-circle"></i> Stop Portal Agent
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Enhanced Filters -->
             <div class="filters animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
                 <div class="filter-section">
                     <h3><i class="fas fa-filter"></i> Filters</h3>
-                    <div class="filter-grid">
-                        <div class="filter-group">
-                            <label for="dateFilter">Date:</label>
-                            <input type="date" id="dateFilter" class="form-control">
-                        </div>
-                        <div class="filter-group">
-                            <label for="groupFilter">Group:</label>
-                            <select id="groupFilter" class="form-control">
-                                <option value="">All Groups</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="rollFilter">Roll No:</label>
-                            <input type="text" id="rollFilter" placeholder="Search by roll no..." class="form-control">
-                        </div>
-                        <div class="filter-group">
-                            <label for="nameFilter">Student Name:</label>
-                            <input type="text" id="nameFilter" placeholder="Search by name..." class="form-control">
-                        </div>
-                    </div>
-                    <div class="filter-actions">
-                        <button id="clearFilters" class="btn btn-secondary">
-                            <i class="fas fa-eraser"></i> Clear Filters
-                        </button>
-                        <button id="applyFilters" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Apply Filters
-                        </button>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Enhanced Table -->
-            <div class="table-container animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
-                <div class="table-header">
-                    <h2><i class="fas fa-list"></i> Attendance Records</h2>
-                    <div class="table-actions">
-                        <button id="exportBtn" class="btn btn-success">
-                            <i class="fas fa-file-excel"></i> Export CSV
-                        </button>
-                        <button id="printBtn" class="btn btn-info">
-                            <i class="fas fa-print"></i> Print
-                        </button>
-                        <div class="view-toggle">
-                            <button id="tableView" class="btn btn-outline active">
-                                <i class="fas fa-table"></i>
-                            </button>
-                            <button id="cardView" class="btn btn-outline">
-                                <i class="fas fa-th-large"></i>
-                            </button>
+                    <!-- Enhanced Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card animate__animated animate__fadeInUp">
+                            <div class="stat-icon total">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalCount">0</h3>
+                                <p>Total Records</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                            <div class="stat-icon today">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="todayCount">0</h3>
+                                <p>Today's Attendance</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                            <div class="stat-icon groups">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="groupCount">0</h3>
+                                <p>Active Groups</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+                            <div class="stat-icon students">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="studentCount">0</h3>
+                                <p>Registered Students</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="table-wrapper">
-                    <table id="attendanceTable" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" id="selectAll">
-                                </th>
-                                <th>Student Name <i class="fas fa-sort sortable" data-column="student_name"></i></th>
-                                <th>Roll No <i class="fas fa-sort sortable" data-column="roll_no"></i></th>
-                                <th>Group <i class="fas fa-sort sortable" data-column="group_name"></i></th>
-                                <th>Date <i class="fas fa-sort sortable" data-column="date"></i></th>
-                                <th>Time <i class="fas fa-sort sortable" data-column="timestamp"></i></th>
-                                <th>Status</th>
-                                <th>Message</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="attendanceBody">
-                            <tr class="loading-row">
-                                <td colspan="9">
-                                    <div class="loading">
-                                        <div class="spinner"></div>
-                                        <span>Loading attendance data...</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <!-- Enhanced Filters -->
+                    <div class="filters animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                        <div class="filter-section">
+                            <h3><i class="fas fa-filter"></i> Filters</h3>
+                            <div class="filter-grid">
+                                <div class="filter-group">
+                                    <label for="dateFilter">Date:</label>
+                                    <input type="date" id="dateFilter" class="form-control">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="groupFilter">Group:</label>
+                                    <select id="groupFilter" class="form-control">
+                                        <option value="">All Groups</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="rollFilter">Roll No:</label>
+                                    <input type="text" id="rollFilter" placeholder="Search by roll no..."
+                                        class="form-control">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="nameFilter">Student Name:</label>
+                                    <input type="text" id="nameFilter" placeholder="Search by name..."
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="filter-actions">
+                                <button id="clearFilters" class="btn btn-secondary">
+                                    <i class="fas fa-eraser"></i> Clear Filters
+                                </button>
+                                <button id="applyFilters" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- Pagination -->
-                <div class="pagination-wrapper">
-                    <div class="pagination-info">
-                        Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span
-                            id="totalRecords">0</span> records
+                    <!-- Enhanced Table -->
+                    <div class="table-container animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
+                        <div class="table-header">
+                            <h2><i class="fas fa-list"></i> Attendance Records</h2>
+                            <div class="table-actions">
+                                <button id="exportBtn" class="btn btn-success">
+                                    <i class="fas fa-file-excel"></i> Export CSV
+                                </button>
+                                <button id="printBtn" class="btn btn-info">
+                                    <i class="fas fa-print"></i> Print
+                                </button>
+                                <div class="view-toggle">
+                                    <button id="tableView" class="btn btn-outline active">
+                                        <i class="fas fa-table"></i>
+                                    </button>
+                                    <button id="cardView" class="btn btn-outline">
+                                        <i class="fas fa-th-large"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table id="attendanceTable" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="selectAll">
+                                        </th>
+                                        <th>Student Name <i class="fas fa-sort sortable" data-column="student_name"></i>
+                                        </th>
+                                        <th>Roll No <i class="fas fa-sort sortable" data-column="roll_no"></i></th>
+                                        <th>Group <i class="fas fa-sort sortable" data-column="group_name"></i></th>
+                                        <th>Date <i class="fas fa-sort sortable" data-column="date"></i></th>
+                                        <th>Time <i class="fas fa-sort sortable" data-column="timestamp"></i></th>
+                                        <th>Status</th>
+                                        <th>Message</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendanceBody">
+                                    <tr class="loading-row">
+                                        <td colspan="9">
+                                            <div class="loading">
+                                                <div class="spinner"></div>
+                                                <span>Loading attendance data...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination-wrapper">
+                            <div class="pagination-info">
+                                Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span
+                                    id="totalRecords">0</span> records
+                            </div>
+                            <div class="pagination" id="pagination">
+                                <!-- Pagination buttons will be inserted here -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="pagination" id="pagination">
-                        <!-- Pagination buttons will be inserted here -->
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
 
