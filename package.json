@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "install": "npm install"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
