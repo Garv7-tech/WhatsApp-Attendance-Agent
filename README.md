@@ -10,7 +10,7 @@ This project is a comprehensive attendance system that uses a WhatsApp bot to au
   * **Web Dashboard**: A modern, responsive web interface to:
       * Visualize attendance statistics (total, today, per group).
       * Filter, sort, and search all attendance records.
-      * Upload student data in bulk via CSV files.
+      * Upload student data in bulk via **CSV or XLSX (Excel)** files.
       * Monitor the status of the WhatsApp agent and connect by scanning a QR code.
   * **College Portal Automator**: An agent that can be launched from the dashboard to:
       * Open a browser and allow for manual or automated login to a college web portal.

@@ -309,11 +309,16 @@ class AttendanceDashboard {
     }
 
     async uploadFile(file) {
-        if (!file.name.endsWith('.csv')) {
-            this.showToast('Please upload a CSV file', 'error');
+        //  UPDATED FILE CHECK 
+        const allowedExtensions = ['.csv', '.xlsx', '.xls'];
+        const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+        
+        if (!allowedExtensions.includes(fileExt)) {
+            this.showToast('Please upload a CSV, XLSX, or XLS file', 'error');
             return;
         }
-
+        // END OF UPDATED CHECK 
+        
         const formData = new FormData();
         formData.append('studentFile', file);
 

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WhatsApp Attendance Dashboard</title>
 
-    <!-- Preload critical resources -->
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -46,7 +45,6 @@
             </div>
         </header>
 
-        <!-- Student Upload Modal -->
         <div id="uploadModal" class="modal">
 
             <div class="modal-content">
@@ -61,12 +59,11 @@
                                 <i class="fas fa-cloud-upload-alt"></i>
                             </div>
                             <div class="upload-text">
-                                <h4>Drag & Drop CSV file here</h4>
+                                <h4>Drag & Drop CSV or Excel file here</h4>
                                 <p>or <span class="browse-link">browse files</span></p>
-                                <p class="file-info">Supported: CSV files with columns: roll_no, name, email, phone,
-                                    branch, semester, section</p>
+                                <p class="file-info">Supported: .csv, .xlsx, .xls</p>
                             </div>
-                            <input type="file" id="fileInput" accept=".csv" style="display: none;">
+                            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display: none;">
                         </div>
 
                         <div class="upload-progress" id="uploadProgress" style="display: none;">
@@ -77,11 +74,14 @@
                         </div>
 
                         <div class="sample-format">
-                            <h4>Sample CSV Format:</h4>
+                            <h4>Sample File Format (CSV, XLSX, or XLS):</h4>
                             <div class="code-block">
                                 rollNo,name,courseName,semester<br>
                                 221099,Garv Sharma,bsc cs,5<br>
                             </div>
+                            <p class="file-info" style="margin-top: 10px;">
+                                Note: Column names like 'Roll No', 'Student Name', 'Course', etc., are also accepted.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,6 @@
                 <div class="filter-section">
                     <h3><i class="fas fa-filter"></i> Filters</h3>
 
-                    <!-- Enhanced Stats Cards -->
                     <div class="stats-grid">
                         <div class="stat-card animate__animated animate__fadeInUp">
                             <div class="stat-icon total">
@@ -164,7 +163,6 @@
                         </div>
                     </div>
 
-                    <!-- Enhanced Filters -->
                     <div class="filters animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
                         <div class="filter-section">
                             <h3><i class="fas fa-filter"></i> Filters</h3>
@@ -201,7 +199,6 @@
                         </div>
                     </div>
 
-                    <!-- Enhanced Table -->
                     <div class="table-container animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
                         <div class="table-header">
                             <h2><i class="fas fa-list"></i> Attendance Records</h2>
@@ -254,24 +251,20 @@
                             </table>
                         </div>
 
-                        <!-- Pagination -->
                         <div class="pagination-wrapper">
                             <div class="pagination-info">
                                 Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span
                                     id="totalRecords">0</span> records
                             </div>
                             <div class="pagination" id="pagination">
-                                <!-- Pagination buttons will be inserted here -->
-                            </div>
+                                </div>
                         </div>
                     </div>
         </main>
     </div>
 
-    <!-- Notification Toast -->
     <div id="toast" class="toast"></div>
 
-    <!-- QR Code Library -->
     <script src="js/qrcode.min.js"></script>
     <script src="js/app.js"></script>
 </body>

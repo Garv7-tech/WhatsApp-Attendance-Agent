@@ -4,6 +4,7 @@ import path from 'path';
 import multer from 'multer';
 import fs from 'fs';
 import csv from 'csv-parser';
+import xlsx from 'xlsx';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import WhatsAppAgent from '../agent/WhatsAppAgent.js'
@@ -12,6 +13,26 @@ import CollegeWebsiteAgent from '../agent/CollegeWebsiteAgent.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
+
+// HELPER FUNCTION FOR ROBUST PARSING
+// This makes sure we can read different column names from any file
+const normalizeStudent = (row) => {
+    // Check for common variations of column names
+    const rollNo = row.roll_no || row.rollNo || row['Roll No'] || row['Roll Number'] || row.ROLL_NO;
+    const name = row.name || row.Name || row['Student Name'] || row.NAME;
+    const course = row.courseName || row.Course || row.course || row.COURSE;
+    const semester = row.semester || row.Semester || row.SEMESTER;
+    
+    // Skip rows that don't have the minimum required data
+    if (!rollNo || !name) return null; 
+    
+    return {
+        rollNo: String(rollNo).trim(),
+        name: String(name).trim(),
+        courseName: course ? String(course).trim() : '',
+        semester: semester ? String(semester).trim() : ''
+    };
+};
 
 
 export default class WebServer {
@@ -90,7 +111,7 @@ export default class WebServer {
             }
         });
 
-        // Upload Students CSV file and import
+        // UPDATED UPLOAD ENDPOINT
         this.app.post('/api/students/upload', this.upload.single('studentFile'), async (req, res) => {
             try {
                 if (!req.file) {
@@ -99,7 +120,9 @@ export default class WebServer {
 
                 const students = [];
                 const filePath = req.file.path;
-
+                const fileExt = path.extname(req.file.originalname).toLowerCase()
+// --- BRANCH 1: CSV file (Existing Logic) ---
+            if(fileExt === '.csv'){
                 fs.createReadStream(filePath)
                     .pipe(csv())
                     .on('data', (row) => {
@@ -124,7 +147,39 @@ export default class WebServer {
                     .on('error', (error) => {
                         res.status(500).json({ success: false, error: error.message });
                     });
+            } 
+            else if(fileExt ==='.xlsx' || fileExt === '.xls'){
+                try {
+                        const workbook = xlsx.readFile(filePath);
+                        const sheetName = workbook.SheetNames[0]; // Get first sheet
+                        const sheet = workbook.Sheets[sheetName];
+                        const jsonData = xlsx.utils.sheet_to_json(sheet); // Convert to JSON
+                        
+                        for (const row of jsonData) {
+                            const student = normalizeStudent(row); // Use same helper
+                            if (student) students.push(student);
+                        }
+                        
+                        // Save and respond
+                        await this.database.saveStudents(students);
+                        fs.unlinkSync(filePath); // Remove uploaded file
+                        res.json({ success: true, message: `${students.length} students imported successfully` });
+
+                    } catch (parseError) {
+                        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+                        return res.status(500).json({ success: false, error: 'Failed to parse Excel file: ' + parseError.message });
+                    }
+            }
+            // --- BRANCH 3: Unsupported file ---
+            else {
+                    fs.unlinkSync(filePath); // Clean up
+                    return res.status(400).json({ success: false, error: 'Unsupported file type. Please upload a CSV, XLSX, or XLS file.' });
+                }
             } catch (err) {
+               // General error handler
+                if (req.file && fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
+                }
                 res.status(500).json({ success: false, error: err.message });
             }
         });
