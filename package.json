@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js",
-    "install": "npm install"
+    "dev": "node --watch src/index.js"
   },
   "keywords": [],
   "author": "",
